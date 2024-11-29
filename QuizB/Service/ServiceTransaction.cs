@@ -1,4 +1,5 @@
-﻿using QuizB.Contract.IRepository;
+﻿using Microsoft.Data.SqlClient;
+using QuizB.Contract.IRepository;
 using QuizB.Contract.IService;
 using QuizB.Dto;
 using QuizB.Entity;
@@ -39,7 +40,9 @@ namespace QuizB.Service
         }
 
         public Result Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount)
+        
         {
+            
 
             if (SourceCardNumber.Length != 16 && DestinationCardNumber.Length != 16)
             {
@@ -50,10 +53,15 @@ namespace QuizB.Service
                 return new Result(false, "The deposit amount must be greater than zero.");
             }
 
+           if(repositoryTransaction.SumTransactionCard(MemoryDb.CurrentCard.CardNumber,Amount)+Amount>MemoryDb.CurrentCard.maximumTransaction)
+            {
+                return new Result(false, "our transaction limit has been reached.");
+            }
             if (MemoryDb.CurrentCard.Balance < Amount)
             {
                 return new Result(false, "There is not enough inventory.");
             }
+
             else
             {
                 repositoryTransaction.Transfer(SourceCardNumber, DestinationCardNumber, Amount);

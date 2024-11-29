@@ -44,18 +44,29 @@ namespace QuizB.Repository
 
                  }).ToList();
         }
-       
+
+        public float SumTransactionCard(string CardNumber, float Amount)
+        {
+            var today = DateTime.Today;
+           var sumTransaction = appDbContext.Transactions.Where(x => x.SourceCardNumber == CardNumber && x.TransactionDate.Date == today)
+                .Sum(x => x.Amount);
+            MemoryDb.CurrentCard.SumTransaction = sumTransaction;
+            return sumTransaction;
+        }
+
         public void Transfer( string SourceCardNumber, string DestinationCardNumber, float Amount)
         {
-
-
             var cardSource = appDbContext.Cards.FirstOrDefault(x => x.CardNumber == SourceCardNumber);
+            
+
             cardSource.Balance = cardSource.Balance - Amount;
             var cardDes =  appDbContext.Cards.FirstOrDefault(x => x.CardNumber == DestinationCardNumber);
-
+            cardSource.maximumTransaction = cardSource.maximumTransaction - Amount;
+            
 
             cardDes.Balance = cardDes.Balance + Amount;
             MemoryDb.CurrentCard.Balance = cardSource.Balance;
+           
             var trans = new Transaction
             {
                 CardId = MemoryDb.CurrentCard.Id,
@@ -63,7 +74,8 @@ namespace QuizB.Repository
                 SourceCardNumber = SourceCardNumber,
                 DestinationCardNumber = DestinationCardNumber,
                 isSuccessful = true,
-                TransactionDate = DateTime.Now
+                TransactionDate = DateTime.Now,
+               
             };
            
             

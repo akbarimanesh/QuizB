@@ -12,6 +12,7 @@ namespace QuizB.Contract.IService
     {
         public Result Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount);
         public List<GetTrranDto> GetListOfTransactions(string CardNumber);
-      
+       
+
     }
 }

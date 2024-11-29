@@ -13,7 +13,7 @@ namespace QuizB.Contract.IRepository
     {
         public void Transfer( string SourceCardNumber, string DestinationCardNumber, float Amount);
         public List<GetTrranDto> GetListOfTransactions(string CardNumber);
-      
+        public float SumTransactionCard(string CardNumber, float Amount);
         public Card GetCard(string CardNumber);
        
 
