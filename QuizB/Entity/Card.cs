@@ -12,7 +12,7 @@ namespace QuizB.Entity
         public string CardNumber { get; set; }
         public string HolderName { get; set; }
         public float Balance { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
         public string Password { get; set; }
       
         public List<Transaction> Transactions { get; set; }

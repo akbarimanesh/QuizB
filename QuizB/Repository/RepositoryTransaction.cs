@@ -20,6 +20,10 @@ namespace QuizB.Repository
             appDbContext = new AppDbContext();
         }
 
+      
+       
+
+       
         public Card GetCard(string CardNumber)
         {
             return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber);
@@ -40,15 +44,34 @@ namespace QuizB.Repository
 
                  }).ToList();
         }
-
-        public void Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount)
+       
+        public void Transfer( string SourceCardNumber, string DestinationCardNumber, float Amount)
         {
+
+
+            var cardSource = appDbContext.Cards.FirstOrDefault(x => x.CardNumber == SourceCardNumber);
+            cardSource.Balance = cardSource.Balance - Amount;
+            var cardDes =  appDbContext.Cards.FirstOrDefault(x => x.CardNumber == DestinationCardNumber);
+
+
+            cardDes.Balance = cardDes.Balance + Amount;
+            MemoryDb.CurrentCard.Balance = cardSource.Balance;
+            var trans = new Transaction
+            {
+                CardId = MemoryDb.CurrentCard.Id,
+                Amount = Amount,
+                SourceCardNumber = SourceCardNumber,
+                DestinationCardNumber = DestinationCardNumber,
+                isSuccessful = true,
+                TransactionDate = DateTime.Now
+            };
+           
             
-            var cardSource = GetCard(MemoryDb.CurrentCard.CardNumber);
-            var transPrice= cardSource.Balance - Amount;
-            var cardDes= GetCard(DestinationCardNumber);
-            cardDes.Balance = transPrice;
+
+            appDbContext.Transactions.Add(trans);
             appDbContext.SaveChanges();
         }
+
+       
     }
 }

@@ -11,9 +11,11 @@ namespace QuizB.Contract.IRepository
 {
     public interface IRepositoryTransaction
     {
-        public void Transfer(string SourceCardNumber, string DestinationCardNumber , float Amount);
+        public void Transfer( string SourceCardNumber, string DestinationCardNumber, float Amount);
         public List<GetTrranDto> GetListOfTransactions(string CardNumber);
+      
         public Card GetCard(string CardNumber);
-        
+       
+
     }
 }

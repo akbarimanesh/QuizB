@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Transaction = QuizB.Entity.Transaction;
 
 namespace QuizB.Service
 {
@@ -22,6 +24,8 @@ namespace QuizB.Service
             repositoryTransaction = new RepositoryTransaction();
             repositoryCard = new RepositoryCard();
         }
+
+       
 
         public List<GetTrranDto> GetListOfTransactions(string CardNumber)
         {
@@ -53,15 +57,15 @@ namespace QuizB.Service
             else
             {
                 repositoryTransaction.Transfer(SourceCardNumber, DestinationCardNumber, Amount);
-                return new Result(true, "The transfer was successful.");
+             
+
+                return new Result(true, "Do it successfully.");
 
             }
                
 
         }
+
        
-
-
-
     }
 }
