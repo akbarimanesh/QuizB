@@ -20,10 +20,10 @@ namespace QuizB.Repository
             appDbContext = new AppDbContext();
         }
 
-      
-       
 
-       
+
+
+
         public Card GetCard(string CardNumber)
         {
             return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber);
@@ -31,59 +31,70 @@ namespace QuizB.Repository
 
         public List<GetTrranDto> GetListOfTransactions(string CardNumber)
         {
-            return appDbContext.Transactions.Where(x => x.Card.CardNumber==CardNumber).AsNoTracking()
+            return appDbContext.Transactions.Where(x => x.Card.CardNumber == CardNumber).AsNoTracking()
                  .Select(x => new GetTrranDto()
                  {
                      Id = x.Id,
-                     SourceCardNumber=x.SourceCardNumber,
-                     DestinationCardNumber=x.DestinationCardNumber,
-                     Amount=x.Amount,
-                     TransactionDate=x.TransactionDate,
-                     isSuccessful=x.isSuccessful,
-                    
+                     SourceCardNumber = x.SourceCardNumber,
+                     DestinationCardNumber = x.DestinationCardNumber,
+                     Amount = x.Amount,
+                     TransactionDate = x.TransactionDate,
+                     isSuccessful = x.isSuccessful,
+
 
                  }).ToList();
         }
 
+        
+
         public float SumTransactionCard(string CardNumber, float Amount)
         {
             var today = DateTime.Today;
-           var sumTransaction = appDbContext.Transactions.Where(x => x.SourceCardNumber == CardNumber && x.TransactionDate.Date == today)
-                .Sum(x => x.Amount);
+            var sumTransaction = appDbContext.Transactions.Where(x => x.SourceCardNumber == CardNumber && x.TransactionDate.Date == today)
+                 .Sum(x => x.Amount);
             MemoryDb.CurrentCard.SumTransaction = sumTransaction;
             return sumTransaction;
         }
 
-        public void Transfer( string SourceCardNumber, string DestinationCardNumber, float Amount)
+        public void Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount)
         {
+            bool isSuccessful = false;
             var cardSource = appDbContext.Cards.FirstOrDefault(x => x.CardNumber == SourceCardNumber);
-            
+
 
             cardSource.Balance = cardSource.Balance - Amount;
-            var cardDes =  appDbContext.Cards.FirstOrDefault(x => x.CardNumber == DestinationCardNumber);
-            cardSource.maximumTransaction = cardSource.maximumTransaction - Amount;
-            
-
-            cardDes.Balance = cardDes.Balance + Amount;
-            MemoryDb.CurrentCard.Balance = cardSource.Balance;
-           
-            var trans = new Transaction
+            var cardDes = appDbContext.Cards.FirstOrDefault(x => x.CardNumber == DestinationCardNumber);
+            try
             {
-                CardId = MemoryDb.CurrentCard.Id,
-                Amount = Amount,
-                SourceCardNumber = SourceCardNumber,
-                DestinationCardNumber = DestinationCardNumber,
-                isSuccessful = true,
-                TransactionDate = DateTime.Now,
-               
-            };
-           
-            
+                cardDes.Balance = cardDes.Balance + Amount;
+                
+                isSuccessful = true;
+            }
+            catch (Exception ex)
+            {
+                cardSource.Balance = cardSource.Balance + Amount;
+                isSuccessful = false;
+                throw new Exception("Transer Money is Faild");
+            }
+            finally
+            {
+                var trans = new Transaction
+                {
+                    CardId = MemoryDb.CurrentCard.Id,
+                    Amount = Amount,
+                    SourceCardNumber = SourceCardNumber,
+                    DestinationCardNumber = DestinationCardNumber,
+                    isSuccessful = isSuccessful,
+                    TransactionDate = DateTime.Now,
 
-            appDbContext.Transactions.Add(trans);
+                };
+                appDbContext.Transactions.Add(trans);
+            }
+
             appDbContext.SaveChanges();
+
         }
 
-       
+
     }
 }

@@ -16,6 +16,8 @@ namespace QuizB.Contract.IRepository
         public float SumTransactionCard(string CardNumber, float Amount);
         public Card GetCard(string CardNumber);
        
+       
+       
 
     }
 }

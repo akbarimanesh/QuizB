@@ -12,7 +12,7 @@ namespace QuizB.Contract.IRepository
         public Card Login(string CardNumber, string password);
         public bool IsCardExists(string CardNumber);
         public Card GetCard(string CardNumber);
-       
+        public bool IsActive(string CardNumber);
 
         public void UpdateCard(string CardNumber);
        

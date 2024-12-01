@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace QuizB.Migrations
 {
     /// <inheritdoc />
@@ -17,21 +19,15 @@ namespace QuizB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CardNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HolderName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CardNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    HolderName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Balance = table.Column<float>(type: "real", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CardId = table.Column<int>(type: "int", nullable: true)
+                    Password = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cards", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cards_Cards_CardId",
-                        column: x => x.CardId,
-                        principalTable: "Cards",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -40,8 +36,8 @@ namespace QuizB.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SourceCardNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DestinationCardNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SourceCardNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    DestinationCardNumber = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
                     Amount = table.Column<float>(type: "real", nullable: false),
                     TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     isSuccessful = table.Column<bool>(type: "bit", nullable: false),
@@ -58,10 +54,14 @@ namespace QuizB.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Cards_CardId",
+            migrationBuilder.InsertData(
                 table: "Cards",
-                column: "CardId");
+                columns: new[] { "Id", "Balance", "CardNumber", "HolderName", "IsActive", "Password" },
+                values: new object[,]
+                {
+                    { 1, 1000f, "1234567891234567", "leila", true, "123" },
+                    { 2, 100f, "7418529637418529", "hana", true, "123" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_CardId",

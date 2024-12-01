@@ -23,7 +23,10 @@ namespace QuizB.Repository
            return  appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber);
         }
 
-       
+        public bool IsActive(string CardNumber)
+        {
+            return appDbContext.Cards.AsNoTracking().Any(x => x.CardNumber == CardNumber);
+        }
 
         public bool IsCardExists(string CardNumber)
         {

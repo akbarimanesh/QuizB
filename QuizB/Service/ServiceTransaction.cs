@@ -53,21 +53,35 @@ namespace QuizB.Service
                 return new Result(false, "The deposit amount must be greater than zero.");
             }
 
-           if(repositoryTransaction.SumTransactionCard(MemoryDb.CurrentCard.CardNumber,Amount)+Amount>MemoryDb.CurrentCard.maximumTransaction)
+           if(repositoryTransaction.SumTransactionCard(MemoryDb.CurrentCard.CardNumber,Amount)+Amount>250)
             {
                 return new Result(false, "our transaction limit has been reached.");
+            }
+            if(!repositoryCard.IsActive(SourceCardNumber))
+            {
+                return new Result(false, "SourceCardNumber is blocked.");
+            }
+            if (!repositoryCard.IsActive(DestinationCardNumber))
+            {
+                return new Result(false, "DestinationCardNumber is blocked.");
             }
             if (MemoryDb.CurrentCard.Balance < Amount)
             {
                 return new Result(false, "There is not enough inventory.");
             }
-
+            //if (!repositoryTransaction.IsSuccess(SourceCardNumber))
+            //{
+            //    repositoryTransaction.Transfer(SourceCardNumber, DestinationCardNumber, Amount);
+            //    return new Result(false, "Transer Money is Faild.");
+            //}
             else
             {
                 repositoryTransaction.Transfer(SourceCardNumber, DestinationCardNumber, Amount);
-             
+                // if(!repositoryTransaction.IsSuccess(SourceCardNumber))
+                //    return new Result(false, "Transer Money is Faild.");
 
-                return new Result(true, "Do it successfully.");
+                //else
+                    return new Result(true, "Do it successfully.");
 
             }
                

@@ -35,22 +35,45 @@ namespace QuizB.Migrations
 
                     b.Property<string>("CardNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("HolderName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Cards");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Balance = 1000f,
+                            CardNumber = "1234567891234567",
+                            HolderName = "leila",
+                            IsActive = true,
+                            Password = "123"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Balance = 100f,
+                            CardNumber = "7418529637418529",
+                            HolderName = "hana",
+                            IsActive = true,
+                            Password = "123"
+                        });
                 });
 
             modelBuilder.Entity("QuizB.Entity.Transaction", b =>
@@ -69,11 +92,13 @@ namespace QuizB.Migrations
 
                     b.Property<string>("DestinationCardNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("SourceCardNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");

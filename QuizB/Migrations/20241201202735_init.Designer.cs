@@ -12,7 +12,7 @@ using QuizB.DataBase;
 namespace QuizB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241129061559_init")]
+    [Migration("20241201202735_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -36,29 +36,47 @@ namespace QuizB.Migrations
                     b.Property<float>("Balance")
                         .HasColumnType("real");
 
-                    b.Property<int?>("CardId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CardNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("HolderName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CardId");
-
                     b.ToTable("Cards");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Balance = 1000f,
+                            CardNumber = "1234567891234567",
+                            HolderName = "leila",
+                            IsActive = true,
+                            Password = "123"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Balance = 100f,
+                            CardNumber = "7418529637418529",
+                            HolderName = "hana",
+                            IsActive = true,
+                            Password = "123"
+                        });
                 });
 
             modelBuilder.Entity("QuizB.Entity.Transaction", b =>
@@ -77,11 +95,13 @@ namespace QuizB.Migrations
 
                     b.Property<string>("DestinationCardNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("SourceCardNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
@@ -96,17 +116,10 @@ namespace QuizB.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("QuizB.Entity.Card", b =>
-                {
-                    b.HasOne("QuizB.Entity.Card", null)
-                        .WithMany("Cards")
-                        .HasForeignKey("CardId");
-                });
-
             modelBuilder.Entity("QuizB.Entity.Transaction", b =>
                 {
                     b.HasOne("QuizB.Entity.Card", "Card")
-                        .WithMany()
+                        .WithMany("Transactions")
                         .HasForeignKey("CardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -116,7 +129,7 @@ namespace QuizB.Migrations
 
             modelBuilder.Entity("QuizB.Entity.Card", b =>
                 {
-                    b.Navigation("Cards");
+                    b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618
         }
