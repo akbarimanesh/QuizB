@@ -15,9 +15,10 @@ namespace QuizB.Entity
         public float Balance { get; set; }
         public bool IsActive { get; set; } = true;
         public string Password { get; set; }
-       
         [NotMapped]
-        public float  SumTransaction { get; set; }
+        public float SumTransaction { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         public List<Transaction> Transactions { get; set; }
     }
 }

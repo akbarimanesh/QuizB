@@ -33,12 +33,12 @@ namespace QuizB.Repository
             return appDbContext.Cards.AsNoTracking().Any(x => x.CardNumber == CardNumber);
         }
 
-        public Card Login(string CardNumber, string password)
+        public bool CheckPassword(string CardNumber, string oldpassword)
         {
             
-           var card= appDbContext.Cards.Where(x => x.CardNumber == CardNumber && x.Password == password).AsNoTracking().FirstOrDefault();
-            card.IsActive = true;
-            return card;
+            return appDbContext.Cards.AsNoTracking().Any(x => x.CardNumber == CardNumber && x.Password == oldpassword);
+            
+            
            
         }
 
@@ -47,6 +47,36 @@ namespace QuizB.Repository
             var card = appDbContext.Cards.FirstOrDefault(p => p.CardNumber == CardNumber);
             card.IsActive = false;
             appDbContext.SaveChanges();
+        }
+
+        public Card GetCardSource(string SourceCardNumber)
+        {
+           return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == SourceCardNumber);
+        }
+
+        public Card GetCardDes(string DestinationCardNumber)
+        {
+            return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == DestinationCardNumber);
+        }
+
+        public void UpdateCardSource(string SourceCardNumber,float  CardSourceBalance)
+        {
+            var card= appDbContext.Cards.FirstOrDefault(p => p.CardNumber == SourceCardNumber);
+            card.Balance = CardSourceBalance;
+            
+            appDbContext.SaveChanges();
+        }
+
+        public void UpdateCardDes(string DestinationCardNumber,float CardDesBalance)
+        {
+            var card = appDbContext.Cards.FirstOrDefault(p => p.CardNumber == DestinationCardNumber);
+            card.Balance = CardDesBalance;
+            appDbContext.SaveChanges();
+        }
+        public string DisplayHolderName(string CardDesNumber)
+        {
+            var card = appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardDesNumber);
+            return card.HolderName;
         }
     }
 }

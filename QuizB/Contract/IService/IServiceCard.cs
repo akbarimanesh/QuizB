@@ -9,6 +9,6 @@ namespace QuizB.Contract.IService
     public interface IServiceCard
     {
         public Result Login(string cardNumber, string password);
-      
+        public string DisplayHolderName(string CardDesNumber);
     }
 }

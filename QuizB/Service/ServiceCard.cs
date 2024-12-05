@@ -56,11 +56,16 @@ namespace QuizB.Service
             }
         }
 
-        public ServiceCard(IRepositoryCard repositoryCard, int failedCount)
+        public string DisplayHolderName(string CardDesNumber)
         {
-            this.repositoryCard = repositoryCard;
-            _failedCount = failedCount;
+            return repositoryCard.DisplayHolderName(CardDesNumber);
         }
+
+        //public ServiceCard(IRepositoryCard repositoryCard, int failedCount)
+        //{
+        //    this.repositoryCard = repositoryCard;
+        //    _failedCount = failedCount;
+        //}
     }
 }
 

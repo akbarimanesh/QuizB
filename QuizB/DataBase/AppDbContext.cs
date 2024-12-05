@@ -20,10 +20,13 @@ namespace QuizB.DataBase
         {
             modelBuilder.ApplyConfiguration(new CardConfig());
             modelBuilder.ApplyConfiguration(new TransactionConfig());
+            modelBuilder.ApplyConfiguration(new UserConfig());
+           
 
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Card> Cards { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
 
     }

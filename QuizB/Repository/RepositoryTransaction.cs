@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using QuizB.Contract.IRepository;
 using QuizB.DataBase;
 using QuizB.Dto;
@@ -6,23 +7,26 @@ using QuizB.Entity;
 using QuizB.MyMemory;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QuizB.Repository
 {
-    internal class RepositoryTransaction : IRepositoryTransaction
+    public class RepositoryTransaction : IRepositoryTransaction
     {
+
         private readonly AppDbContext appDbContext;
+        string path = "E:/maktab_c#/HW/HW15/QuizB/QuizB/bin/Debug/net8.0/VerificationCode.txt";
+       
         public RepositoryTransaction()
         {
             appDbContext = new AppDbContext();
         }
 
-
-
-
+       
 
         public Card GetCard(string CardNumber)
         {
@@ -56,45 +60,37 @@ namespace QuizB.Repository
             return sumTransaction;
         }
 
-        public void Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount)
+        public void Transfer(Transaction transaction)
         {
-            bool isSuccessful = false;
-            var cardSource = appDbContext.Cards.FirstOrDefault(x => x.CardNumber == SourceCardNumber);
-
-
-            cardSource.Balance = cardSource.Balance - Amount;
-            var cardDes = appDbContext.Cards.FirstOrDefault(x => x.CardNumber == DestinationCardNumber);
-            try
-            {
-                cardDes.Balance = cardDes.Balance + Amount;
-                
-                isSuccessful = true;
-            }
-            catch (Exception ex)
-            {
-                cardSource.Balance = cardSource.Balance + Amount;
-                isSuccessful = false;
-                throw new Exception("Transer Money is Faild");
-            }
-            finally
-            {
-                var trans = new Transaction
-                {
-                    CardId = MemoryDb.CurrentCard.Id,
-                    Amount = Amount,
-                    SourceCardNumber = SourceCardNumber,
-                    DestinationCardNumber = DestinationCardNumber,
-                    isSuccessful = isSuccessful,
-                    TransactionDate = DateTime.Now,
-
-                };
-                appDbContext.Transactions.Add(trans);
-            }
-
-            appDbContext.SaveChanges();
-
+          
+                appDbContext.Transactions.Add(transaction);
+                appDbContext.SaveChanges();
         }
+
+        public void GenerateVerificationCode(string CardSouNumber)
+        {
+            
+            if (!File.Exists(path))
+            {
+                File.Create(path);
+            }
+            Random random1 = new Random();
+            var randomNumber = random1.Next(10000, 100000).ToString();
+            
+            var date = DateTime.Now;
+            var save = $"{CardSouNumber}-{randomNumber}-{date}";
+            File.AppendAllText(path, save + Environment.NewLine);
+        }
+
+        public string ReadVerificationCode()
+        {
+            var data = File.ReadAllText(path);
+            return data;
+          
+           
+        }
+    }
 
 
     }
-}
+

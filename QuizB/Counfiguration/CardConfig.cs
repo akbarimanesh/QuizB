@@ -18,8 +18,8 @@ namespace QuizB.Counfiguration
             builder.Property(x => x.Password).HasMaxLength(12);
             builder.HasData(new List<Card>()
             {
-                new Card(){Id=1,CardNumber="1234567891234567",HolderName="leila",Password="123",Balance=1000 },
-                new Card(){Id=2,CardNumber="7418529637418529",HolderName="hana",Password="123",Balance=100 }
+                new Card(){Id=1,CardNumber="1234567891234567",HolderName="leila",Password="123",Balance=1000,UserId=1 },
+                new Card(){Id=2,CardNumber="7418529637418529",HolderName="hana",Password="123",Balance=100 ,UserId=2 }
             });
         }
     }

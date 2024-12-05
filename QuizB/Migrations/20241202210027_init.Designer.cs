@@ -12,7 +12,7 @@ using QuizB.DataBase;
 namespace QuizB.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241201202735_init")]
+    [Migration("20241202210027_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -54,7 +54,12 @@ namespace QuizB.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cards");
 
@@ -66,7 +71,8 @@ namespace QuizB.Migrations
                             CardNumber = "1234567891234567",
                             HolderName = "leila",
                             IsActive = true,
-                            Password = "123"
+                            Password = "123",
+                            UserId = 1
                         },
                         new
                         {
@@ -75,7 +81,8 @@ namespace QuizB.Migrations
                             CardNumber = "7418529637418529",
                             HolderName = "hana",
                             IsActive = true,
-                            Password = "123"
+                            Password = "123",
+                            UserId = 2
                         });
                 });
 
@@ -116,6 +123,61 @@ namespace QuizB.Migrations
                     b.ToTable("Transactions");
                 });
 
+            modelBuilder.Entity("QuizB.Entity.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NationalCode")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Mobile = "09124640356",
+                            Name = "leila",
+                            NationalCode = "0012345678"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Mobile = "09196043564",
+                            Name = "hana",
+                            NationalCode = "0012387654"
+                        });
+                });
+
+            modelBuilder.Entity("QuizB.Entity.Card", b =>
+                {
+                    b.HasOne("QuizB.Entity.User", "User")
+                        .WithMany("Cards")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("QuizB.Entity.Transaction", b =>
                 {
                     b.HasOne("QuizB.Entity.Card", "Card")
@@ -130,6 +192,11 @@ namespace QuizB.Migrations
             modelBuilder.Entity("QuizB.Entity.Card", b =>
                 {
                     b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("QuizB.Entity.User", b =>
+                {
+                    b.Navigation("Cards");
                 });
 #pragma warning restore 612, 618
         }

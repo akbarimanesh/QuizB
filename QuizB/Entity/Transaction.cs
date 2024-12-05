@@ -15,7 +15,6 @@ namespace QuizB.Entity
         public float Amount { get; set; }
         public DateTime TransactionDate { get; set; }
         public bool isSuccessful { get; set; }
-        
         public int CardId { get; set; }
         public Card Card { get; set; }
 
