@@ -181,15 +181,25 @@ void Transfer()
 }
 void ShowTransection()
 {
-    Console.Clear();
-    ColoredConsole.WriteLine($"{Yellow("***************List of Transection*************")}");
-    ColoredConsole.WriteLine($"{Yellow("*****************************************")}");
-    ColoredConsole.Write($"{Blue("Please Enter CardNumber:")}");
-    string cardnumber = Console.ReadLine();
-    var card1 = serviceTransaction.GetListOfTransactions(cardnumber);
-    ConsoleTable.From<GetTrranDto>(card1)
-        .Configure(o => o.NumberAlignment = Alignment.Right)
-        .Write(Format.Minimal);
+    try
+    {
+        Console.Clear();
+        ColoredConsole.WriteLine($"{Yellow("***************List of Transection*************")}");
+        ColoredConsole.WriteLine($"{Yellow("*****************************************")}");
+        ColoredConsole.Write($"{Blue("Please Enter CardNumber:")}");
+        string cardnumber = Console.ReadLine();
+        var card1 = serviceTransaction.GetListOfTransactions(cardnumber);
+        ConsoleTable.From<GetTrranDto>(card1)
+            .Configure(o => o.NumberAlignment = Alignment.Right)
+            .Write(Format.Minimal);
+    }
+    catch (Exception ex)
+    {
+
+        ColoredConsole.Write($"{Red(ex.Message)}");
+
+    }
+    
     Console.ReadKey();
 }
 void BalanceDisplay()

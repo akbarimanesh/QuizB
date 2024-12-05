@@ -30,12 +30,14 @@ namespace QuizB.Repository
 
         public Card GetCard(string CardNumber)
         {
-            return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber);
+            return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber );
         }
 
         public List<GetTrranDto> GetListOfTransactions(string CardNumber)
         {
-            return appDbContext.Transactions.Where(x => x.Card.CardNumber == CardNumber).AsNoTracking()
+         
+
+            return appDbContext.Transactions.Where(x => x.Card.CardNumber == CardNumber && x.Card.UserId == MemoryDb.CurrentCard.UserId).AsNoTracking()
                  .Select(x => new GetTrranDto()
                  {
                      Id = x.Id,

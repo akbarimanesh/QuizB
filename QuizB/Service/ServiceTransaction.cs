@@ -32,13 +32,29 @@ namespace QuizB.Service
 
         public List<GetTrranDto> GetListOfTransactions(string CardNumber)
         {
-            if (repositoryCard.IsCardExists(CardNumber))
+            if (CardNumber.Length != 16)
             {
-                return  repositoryTransaction.GetListOfTransactions(CardNumber);
+                throw new Exception("The card number numberCard is not valid.");
+            }
+            if (!repositoryCard.IsActive(CardNumber))
+            {
+                throw new Exception("numberCard is blocked.");
+            }
+            if (!repositoryCard.IsCardExists(CardNumber))
+            {
+                throw new Exception("This card is not available..");
+            }
+
+            else 
+            {
+                if(repositoryTransaction.GetListOfTransactions(CardNumber) == null)
+                {
+                    throw new Exception("You do not have access to this card.");
+                }
+                else return repositoryTransaction.GetListOfTransactions(CardNumber);
 
             }
-            else
-                return null;
+            
         }
 
         public bool IsVerificationCode(string CardSouNumber, string code)
