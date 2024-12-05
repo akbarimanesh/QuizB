@@ -61,11 +61,7 @@ namespace QuizB.Service
             return repositoryCard.DisplayHolderName(CardDesNumber);
         }
 
-        //public ServiceCard(IRepositoryCard repositoryCard, int failedCount)
-        //{
-        //    this.repositoryCard = repositoryCard;
-        //    _failedCount = failedCount;
-        //}
+       
     }
 }
 

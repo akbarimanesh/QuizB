@@ -15,39 +15,7 @@ User user = new User();
 Transaction transaction = new Transaction();
 int option = 0;
 int option1 = 0;
-//while (true)
-//{
-//    try
-//    {
-//        do
-//        {
 
-//            Console.Clear();
-//            ColoredConsole.WriteLine($"{White("1:Login ")}");
-
-//            ColoredConsole.Write($"{Blue("please Enter your option : ")}");
-//            option1 = int.Parse(Console.ReadLine());
-//            switch (option1)
-//            {
-//                case 1:
-//                    Login();
-//                    break;
-
-//                default:
-//                    break;
-//            }
-
-
-//        } while (option1 < 3);
-//}
-//    catch (Exception ex)
-//    {
-
-//        ColoredConsole.Write($"{Red("Select an option.")}");
-
-//    }
-//    Console.ReadKey();
-//}
 Login();
 void Login()
 {
