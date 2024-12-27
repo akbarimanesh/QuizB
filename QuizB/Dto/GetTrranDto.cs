@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuizB.Dto
-{
+
     public class GetTrranDto
     {
         public int Id { get; set; }
@@ -15,4 +14,4 @@ namespace QuizB.Dto
         public DateTime TransactionDate { get; set; }
         public bool isSuccessful { get; set; }
     }
-}
+
