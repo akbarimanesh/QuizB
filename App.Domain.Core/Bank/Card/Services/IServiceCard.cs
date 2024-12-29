@@ -9,7 +9,16 @@ using App.Domain.Core.Bank;
 
     public interface IServiceCard
     {
-        public Result Login(string cardNumber, string password);
-        public string DisplayHolderName(string CardDesNumber);
-    }
+    public bool CheckPassword(string CardNumber, string oldpassword);
+    public bool IsCardExists(string CardNumber);
+    public Card GetCard(string CardNumber);
+    public bool IsActive(string CardNumber);
+    public Card GetCardSource(string SourceCardNumber);
+    public Card GetCardDes(string DestinationCardNumber);
+    public string DisplayHolderName(string CardDesNumber);
+    public void UpdateCard(string CardNumber);
+    public void UpdateCardSource(string SourceCardNumber, float CardSourceBalance);
+    public void UpdateCardDes(string DestinationCardNumber, float CardDesBalance);
+
+}
 

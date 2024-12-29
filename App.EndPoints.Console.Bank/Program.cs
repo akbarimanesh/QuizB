@@ -1,12 +1,12 @@
 ﻿
+using App.Domain.AppServices.Bank.Transaction;
 using Colors.Net;
 using ConsoleTables;
-
-
+using System.Reflection.Metadata;
 using static Colors.Net.StringStaticMethods;
-ServiceTransaction serviceTransaction = new ServiceTransaction();
-ServiceCard serviceCard = new ServiceCard();
-ServiceUser serviceUser = new ServiceUser();
+TransactionAppService serviceAppTransaction = new TransactionAppService();
+CardAppService serviceAppCard = new CardAppService();
+UserAppService serviceAppUser = new UserAppService();
 Card card = new Card();
 User user = new User();
 Transaction transaction = new Transaction();
@@ -25,7 +25,7 @@ void Login()
     ColoredConsole.Write($"{Blue("Please Enter Password :")}");
     string password = Console.ReadLine();
 
-    var result = serviceCard.Login(numberCard, password);
+    var result = serviceAppCard.Login(numberCard, password);
 
     if (result.IsSuccess)
     {
@@ -101,7 +101,7 @@ void Transfer()
     string SourceCardNumber = Console.ReadLine();
     ColoredConsole.Write($"{Blue("Please Enter DestinationCardNumber:")}");
     string DestinationCardNumber = Console.ReadLine();
-    var hoderName = serviceCard.DisplayHolderName(DestinationCardNumber);
+    var hoderName = serviceAppCard.DisplayHolderName(DestinationCardNumber);
     ColoredConsole.WriteLine();
     ColoredConsole.WriteLine($"{Yellow("HoderName Card is :")}{hoderName}");
     ColoredConsole.Write($"{Yellow("Do you confirm? y/n : ")}");
@@ -111,12 +111,12 @@ void Transfer()
     {
         ColoredConsole.Write($"{Blue("Please Enter Amount:")}");
         float Amount = float.Parse(Console.ReadLine());
-        serviceTransaction.GenerateVerificationCode(SourceCardNumber);
+        serviceAppTransaction.GenerateVerificationCode(SourceCardNumber);
         ColoredConsole.Write($"{Blue("Enter the code sent:")}");
         string code = Console.ReadLine();
-        if (serviceTransaction.IsVerificationCode(SourceCardNumber, code))
+        if (serviceAppTransaction.IsVerificationCode(SourceCardNumber, code))
         {
-            var result = serviceTransaction.Transfer(SourceCardNumber, DestinationCardNumber, Amount);
+            var result = serviceAppTransaction.Transfer(SourceCardNumber, DestinationCardNumber, Amount);
 
 
             if (result.IsSuccess)
@@ -153,7 +153,7 @@ void ShowTransection()
         ColoredConsole.WriteLine($"{Yellow("*****************************************")}");
         ColoredConsole.Write($"{Blue("Please Enter CardNumber:")}");
         string cardnumber = Console.ReadLine();
-        var card1 = serviceTransaction.GetListOfTransactions(cardnumber);
+        var card1 = serviceAppTransaction.GetListOfTransactions(cardnumber);
         ConsoleTable.From<GetTrranDto>(card1)
             .Configure(o => o.NumberAlignment = Alignment.Right)
             .Write(Format.Minimal);
@@ -176,7 +176,7 @@ void BalanceDisplay()
         ColoredConsole.WriteLine($"{Yellow("*****************************************")}");
         ColoredConsole.Write($"{Blue("Please Enter CardNumber:")}");
         string cardnumber = Console.ReadLine();
-        var card = serviceUser.BalanceDisplay(cardnumber);
+        var card = serviceAppUser.BalanceDisplay(cardnumber);
         ColoredConsole.Write($"{Green("Your card balance is: ")}{card.Balance}$");
     }
     catch (Exception ex)
@@ -201,7 +201,7 @@ void ChangePassword()
         string oldPassword = Console.ReadLine();
         ColoredConsole.Write($"{Blue("Please Enter NewPassword:")}");
         string newPassword = Console.ReadLine();
-        var result = serviceUser.ChangeCardPassword(cardnumber, oldPassword, newPassword);
+        var result = serviceAppUser.ChangeCardPassword(cardnumber, oldPassword, newPassword);
         if (result.IsSuccess)
         {
             ColoredConsole.WriteLine($"{Yellow("******************************")}");

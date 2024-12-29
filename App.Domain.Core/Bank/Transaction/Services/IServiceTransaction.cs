@@ -11,10 +11,13 @@ using System.Transactions;
 
     public interface IServiceTransaction
     {
-        public Result Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount);
+         public void Transfer(Transaction transaction);
+       
         public List<GetTrranDto> GetListOfTransactions(string CardNumber);
+        public float SumTransactionCard(string CardNumber, float Amount);
+        public Card GetCard(string CardNumber);
         public void GenerateVerificationCode(string CardSouNumber);
-        public bool IsVerificationCode(string CardSouNumber,string code);
+        public string ReadVerificationCode();
 
 
 

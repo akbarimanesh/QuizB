@@ -10,55 +10,62 @@ using System.Threading.Tasks;
     public class ServiceCard : IServiceCard
     {
         IRepositoryCard repositoryCard;
-        private int _failedCount = 0;
+       
         public ServiceCard()
         {
             repositoryCard = new RepositoryCard();
         }
 
-
-        public Result Login(string cardNumber, string password)
-        {
-            if (cardNumber.Length != 16)
-            {
-                return new Result(false, "The card is not valid.");
-            }
-
-            var card = repositoryCard.GetCard(cardNumber);
-
-            if (card == null || !card.IsActive)
-            {
-                return new Result(false, "Card is not active.");
-            }
-
-            if (card.Password == password)
-            {
-                MemoryDb.CurrentCard = card;
-                _failedCount = 0;
-                return new Result(true, "Welcome.");
-            }
-            else
-            {
-                _failedCount++;
-
-                if (_failedCount >= 3)
-                {
-                    card.IsActive = false;
-                    repositoryCard.UpdateCard(cardNumber);
-                    return new Result(false, "Card deactivated.");
-                }
-
-                return new Result(false, "pass invalid.");
-            }
-        }
-
-        public string DisplayHolderName(string CardDesNumber)
-        {
-            return repositoryCard.DisplayHolderName(CardDesNumber);
-        }
-
-       
+    public bool CheckPassword(string CardNumber, string oldpassword)
+    {
+        return repositoryCard.CheckPassword(CardNumber, oldpassword);
     }
+
+    public string DisplayHolderName(string CardDesNumber)
+    {
+        return repositoryCard.DisplayHolderName(CardDesNumber);
+    }
+
+    public Card GetCard(string CardNumber)
+    {
+       return repositoryCard.GetCard(CardNumber);
+    }
+
+    public Card GetCardDes(string DestinationCardNumber)
+    {
+        return repositoryCard.GetCardDes(DestinationCardNumber);
+    }
+
+    public Card GetCardSource(string SourceCardNumber)
+    {
+       return repositoryCard.GetCardSource(SourceCardNumber);
+    }
+
+    public bool IsActive(string CardNumber)
+    {
+        return repositoryCard.IsActive(CardNumber);
+    }
+
+    public bool IsCardExists(string CardNumber)
+    {
+        return repositoryCard.IsCardExists(CardNumber);
+    }
+
+    public void UpdateCard(string CardNumber)
+    {
+         repositoryCard.UpdateCard(CardNumber);
+    }
+
+    public void UpdateCardDes(string DestinationCardNumber, float CardDesBalance)
+    {
+       repositoryCard.UpdateCardDes(DestinationCardNumber, CardDesBalance);
+    }
+
+    public void UpdateCardSource(string SourceCardNumber, float CardSourceBalance)
+    {
+        repositoryCard.UpdateCardSource(SourceCardNumber, CardSourceBalance);
+    }
+}
 
 
 
