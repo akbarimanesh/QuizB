@@ -17,7 +17,7 @@ namespace App.EndPoints.Mvc.Bank.Controllers
         {
             return View();
         }
-        [HttpPost]
+        
         public IActionResult Login(string cardNumber, string password)
         {
 

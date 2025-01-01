@@ -6,10 +6,10 @@
         <img src="~/pic/logo.png" alt="logo">
         <h5>Eghtesad Novin Bank</h5><br>
         <p>
-            HoderName Destination CardNumber Is :@TempData["HolderName"]
+            HoderName Destination CardNumber Is :@TempData.Peek("HolderName")
         </p>
         <p>
-            The Transfer Amount Is :@TempData["Amount"].ToString()
+            The Transfer Amount Is :@TempData.Peek("Amount").ToString()
         </p>
        
             <div class="button-container">

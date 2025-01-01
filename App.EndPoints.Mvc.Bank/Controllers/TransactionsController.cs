@@ -1,4 +1,5 @@
 ﻿using App.Domain.AppServices.Bank.Transaction;
+using App.Domain.Core.Bank;
 using App.Domain.Core.Bank.Card.AppServices;
 using App.Domain.Core.Bank.Transaction.AppServices;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,15 @@ namespace App.EndPoints.Mvc.Bank.Controllers
             }
             try
             {
+                if (result.IsSuccess)
+                {
+                    ViewBag.SuccessMessage = result.IsMessage;
+
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = result.IsMessage;
+                }
                 var HolderName = _cardAppService.DisplayHolderName(destinationCardNumber);
                 TempData["HolderName"] = HolderName;
                 TempData["Amount"] =amount.ToString();
@@ -158,6 +168,11 @@ namespace App.EndPoints.Mvc.Bank.Controllers
                     {
                         return RedirectToAction("TransferMoney");
                     }
+                    else
+                    {
+                        ViewBag.Message = "Your code has expired.";
+                    }
+
                 }
                 
 
@@ -172,6 +187,7 @@ namespace App.EndPoints.Mvc.Bank.Controllers
             return View();
 
         }
+        
         public IActionResult TransferMoney()
         {
             if (!IsLoggedIn())
@@ -181,13 +197,10 @@ namespace App.EndPoints.Mvc.Bank.Controllers
             
                 string sourceCardNumber = TempData["SourceCardNumber"].ToString();
 
+               string destinationCardNumber = TempData["DestinationCardNumber"].ToString();
+                      
+              float amount=Convert.ToSingle(TempData["Amount"]);
 
-              
-
-            string destinationCardNumber = TempData["DestinationCardNumber"].ToString();
-
-           //string amount1=TempData["Amount"].ToString();
-          float amount=Convert.ToSingle(TempData["Amount"]);
             var result = _transactionAppService.Transfer(sourceCardNumber, destinationCardNumber, amount);
             if (result.IsSuccess)
             {
@@ -199,6 +212,7 @@ namespace App.EndPoints.Mvc.Bank.Controllers
                 ViewBag.ErrorMessage = result.IsMessage;
             }
             return View();
+           // return RedirectToAction("Index", "Home");
         }
         private bool IsLoggedIn()
         {

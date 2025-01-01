@@ -165,7 +165,7 @@ namespace App.Domain.AppServices.Bank.Transaction
 
 
                 }
-                return new Result(true, "Do it successfully.");
+                return new Result(true, "Money Transfer Completed Successfully.");
             }
 
 
