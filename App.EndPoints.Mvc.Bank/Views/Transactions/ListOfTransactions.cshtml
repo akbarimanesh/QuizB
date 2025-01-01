@@ -1,0 +1,40 @@
+﻿@model List<GetTrranDto>
+<div class="table-responsive">
+
+    <table class="table-Transection" asp-action="ListTransactions">
+
+        <thead>
+            <tr>
+
+                <td><img src="~/pic/logo.png" alt="logo"> </td>
+                <td>Transection List</td>
+            </tr>
+            <tr>
+
+                <th>Id</th>
+                <th>SourceCardNumber</th>
+                <th>DestinationCardNumber</th>
+                <th>Amount</th>
+                <th>TransactionDate</th>
+                <th>isSuccessful</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.SourceCardNumber</td>
+                    <td>@item.DestinationCardNumber</td>
+                    <td>@item.Amount</td>
+                    <td>@item.TransactionDate</td>
+                    <td>@item.isSuccessful</td>
+                    
+                </tr>
+            }
+           
+        </tbody>
+
+
+    </table>
+</div>

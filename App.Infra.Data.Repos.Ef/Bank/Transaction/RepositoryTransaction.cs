@@ -14,7 +14,7 @@ using System.Threading.Tasks;
     {
 
         private readonly AppDbContext appDbContext;
-        string path = "E:/maktab_c#/CW/CW18/QuizB/QuizB/bin/Debug/net8.0/VerificationCode.txt";
+        string path = "E:/maktab_c#/HW/HW19/QuizB/QuizB/bin/Debug/net8.0/VerificationCode.txt";
        
         public RepositoryTransaction()
         {

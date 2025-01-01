@@ -1,0 +1,43 @@
+﻿
+<div class="page">
+   
+    <form class="Transfer-form" method="post" asp-action="Confirmation">
+
+        <img src="~/pic/logo.png" alt="logo">
+        <h5>Eghtesad Novin Bank</h5><br>
+        <p>
+            HoderName Destination CardNumber Is :@TempData["HolderName"]
+        </p>
+        <p>
+            The Transfer Amount Is :@TempData["Amount"].ToString()
+        </p>
+       
+            <div class="button-container">
+
+
+
+           
+                   <button type="submit" name="action" value="submit" class="button submit-button">Send Code</button>
+
+
+
+
+
+                   <button type="submit" name="action" value="cancel" class="button cancel-button">Cancel</button>
+
+              
+            </div>
+        
+
+
+      
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success">@ViewBag.SuccessMessage</div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+    </form>
+</div>

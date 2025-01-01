@@ -1,0 +1,27 @@
+﻿<div class="page">
+
+    <form class="Transfer-form" method="post" asp-action="Transfer">
+
+        <img src="~/pic/logo.png" alt="logo">
+        <h5>Eghtesad Novin Bank</h5><br>
+
+
+        <input placeholder="SourceCardNumber" type="text" name="sourceCardNumber" value=""
+               required><br>
+
+        <input placeholder="DestinationCardNumber" type="text" name="destinationCardNumber" value="" required><br>
+        
+        <input placeholder="Amount" type="number" name="amount" value="" required><br>
+
+       
+        <button type="send" class="Transfer-btn">Send</button>
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success">@ViewBag.SuccessMessage</div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+    </form>
+</div>

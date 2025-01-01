@@ -1,0 +1,25 @@
+﻿<div class="page">
+
+    <form class="Code-form" method="post" asp-action="Code">
+
+        <img src="~/pic/logo.png" alt="logo">
+        <h5>Eghtesad Novin Bank</h5><br>
+
+
+        <input placeholder="Enter Code" type="text" name="code" value="" required><br><br>
+
+
+        <button type="send" class="Code-btn">Send</button>
+
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success"> @ViewBag.SuccessMessage$</div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+
+    </form>
+</div>

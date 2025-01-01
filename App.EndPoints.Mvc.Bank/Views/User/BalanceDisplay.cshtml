@@ -1,0 +1,25 @@
+﻿<div class="page">
+
+    <form class="BalanceDisplay-form" method="post" asp-action="BalanceDisplay">
+
+        <img src="~/pic/logo.png" alt="logo">
+        <h5>Eghtesad Novin Bank</h5><br>
+
+
+        <input placeholder="Enter NumberCard" type="text" name="cardNumber" value="" required><br><br>
+
+        
+        <button type="send" class="BalanceDisplay-btn">Send</button>
+
+        @if (ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success">Your card balance is: @ViewBag.SuccessMessage$</div>
+        }
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+
+    </form>
+</div>
