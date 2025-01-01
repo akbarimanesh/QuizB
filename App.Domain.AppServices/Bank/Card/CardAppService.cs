@@ -18,7 +18,22 @@ using System.Threading.Tasks;
         }
         public string DisplayHolderName(string CardDesNumber)
         {
-             return SerCard.DisplayHolderName(CardDesNumber);
+             if (CardDesNumber.Length != 16)
+             {
+                 throw new Exception("The card is not valid.");
+                   
+             }
+             var card=SerCard.GetCard(CardDesNumber);
+             if (card == null || !card.IsActive)
+             {
+                 throw new Exception("Card is not active.");
+            
+             }
+             else
+             {
+                   return SerCard.DisplayHolderName(CardDesNumber);
+             }
+       
         }
 
     public Result Login(string cardNumber, string password)

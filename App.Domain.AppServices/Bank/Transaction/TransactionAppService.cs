@@ -93,7 +93,7 @@ namespace App.Domain.AppServices.Bank.Transaction
                 fee = (float)(Amount * 0.005);
 
             }
-            if (SourceCardNumber.Length != 16 && DestinationCardNumber.Length != 16)
+            if (SourceCardNumber.Length != 16 || DestinationCardNumber.Length != 16)
             {
                 return new Result(false, "The card number SourceCardNumber or DestinationCardNumber is not valid.");
             }
