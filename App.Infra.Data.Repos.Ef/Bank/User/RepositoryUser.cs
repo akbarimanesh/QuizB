@@ -9,24 +9,27 @@ using System.Threading.Tasks;
 
     public class RepositoryUser : IRepositoryUser
     {
-        private readonly AppDbContext appDbContext;
-        public RepositoryUser()
-        {
-            appDbContext = new AppDbContext();
-        }
+        private readonly AppDbContext _appDbContext;
+
+    public RepositoryUser(AppDbContext appDbContext)
+    {
+          _appDbContext = appDbContext;
+    }
+
+   
         public Card BalanceDisplay(string numberCard)
         {
-           return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == numberCard && x.UserId==MemoryDb.CurrentCard.UserId);
+           return _appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == numberCard && x.UserId==MemoryDb.CurrentCard.UserId);
             
            
         }
 
         public void ChangeCardPassword(string numberCard, string oldPassword, string newPassword)
         {
-           var card= appDbContext.Cards.Where(x => x.CardNumber == numberCard && x.Password == oldPassword ).FirstOrDefault();
+           var card= _appDbContext.Cards.Where(x => x.CardNumber == numberCard && x.Password == oldPassword ).FirstOrDefault();
             
                 card.Password = newPassword;
-                appDbContext.SaveChanges();
+                _appDbContext.SaveChanges();
            
             
             
@@ -34,7 +37,7 @@ using System.Threading.Tasks;
 
         public bool IsCardForUser(string numberCard)
         {
-            return appDbContext.Cards.AsNoTracking().Any(x => x.CardNumber == numberCard && x.UserId == MemoryDb.CurrentCard.UserId);
+            return _appDbContext.Cards.AsNoTracking().Any(x => x.CardNumber == numberCard && x.UserId == MemoryDb.CurrentCard.UserId);
         }
     }
 

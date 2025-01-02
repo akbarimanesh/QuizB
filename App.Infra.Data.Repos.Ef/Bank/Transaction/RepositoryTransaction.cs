@@ -13,26 +13,29 @@ using System.Threading.Tasks;
     public class RepositoryTransaction : IRepositoryTransaction
     {
 
-        private readonly AppDbContext appDbContext;
-        string path = "E:/maktab_c#/HW/HW19/QuizB/QuizB/bin/Debug/net8.0/VerificationCode.txt";
+        private readonly AppDbContext _appDbContext;
+
+    public RepositoryTransaction(AppDbContext appDbContext)
+    {
+       _appDbContext = appDbContext;
+    }
+
+    string path = "E:/maktab_c#/CW/CW19/QuizB/QuizB/bin/Debug/net8.0/VerificationCode.txt";
        
-        public RepositoryTransaction()
-        {
-            appDbContext = new AppDbContext();
-        }
+        
 
        
 
         public Card GetCard(string CardNumber)
         {
-            return appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber );
+            return _appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == CardNumber );
         }
 
         public List<GetTrranDto> GetListOfTransactions(string CardNumber)
         {
          
 
-            return appDbContext.Transactions.Where(x => x.Card.CardNumber == CardNumber && x.Card.UserId == MemoryDb.CurrentCard.UserId).AsNoTracking()
+            return _appDbContext.Transactions.Where(x => x.Card.CardNumber == CardNumber && x.Card.UserId == MemoryDb.CurrentCard.UserId).AsNoTracking()
                  .Select(x => new GetTrranDto()
                  {
                      Id = x.Id,
@@ -51,7 +54,7 @@ using System.Threading.Tasks;
         public float SumTransactionCard(string CardNumber, float Amount)
         {
             var today = DateTime.Today;
-            var sumTransaction = appDbContext.Transactions.Where(x => x.SourceCardNumber == CardNumber && x.TransactionDate.Date == today)
+            var sumTransaction = _appDbContext.Transactions.Where(x => x.SourceCardNumber == CardNumber && x.TransactionDate.Date == today)
                  .Sum(x => x.Amount);
             MemoryDb.CurrentCard.SumTransaction = sumTransaction;
             return sumTransaction;
@@ -60,8 +63,8 @@ using System.Threading.Tasks;
         public void Transfer(Transaction transaction)
         {
           
-                appDbContext.Transactions.Add(transaction);
-                appDbContext.SaveChanges();
+                _appDbContext.Transactions.Add(transaction);
+                _appDbContext.SaveChanges();
         }
 
         public void GenerateVerificationCode(string CardSouNumber)

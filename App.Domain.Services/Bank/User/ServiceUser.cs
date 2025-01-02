@@ -9,27 +9,26 @@ using System.Threading.Tasks;
 
     public class ServiceUser : IServiceUser
     { 
-        IRepositoryUser RepositoryUser;
-       
-        public ServiceUser()
-        {
-            RepositoryUser = new RepositoryUser();
-            
-        }
+        IRepositoryUser _RepositoryUser;
+
+    public ServiceUser(IRepositoryUser repositoryUser)
+    {
+        _RepositoryUser = repositoryUser;
+    }
 
     public Card BalanceDisplay(string numberCard)
     {
-        return RepositoryUser.BalanceDisplay(numberCard);
+        return _RepositoryUser.BalanceDisplay(numberCard);
     }
 
     public void ChangeCardPassword(string numberCard, string oldPassword, string newPassword)
     {
-        RepositoryUser.ChangeCardPassword(numberCard, oldPassword, newPassword);
+        _RepositoryUser.ChangeCardPassword(numberCard, oldPassword, newPassword);
     }
 
     public bool IsCardForUser(string numberCard)
     {
-        return RepositoryUser.IsCardForUser(numberCard);
+        return _RepositoryUser.IsCardForUser(numberCard);
     }
 }
 

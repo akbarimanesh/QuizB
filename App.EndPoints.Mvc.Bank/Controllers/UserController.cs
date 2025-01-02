@@ -8,10 +8,12 @@ namespace App.EndPoints.Mvc.Bank.Controllers
     public class UserController : Controller
     {
         private readonly IUserAppService _userAppService;
-        public UserController()
+
+        public UserController(IUserAppService userAppService)
         {
-            _userAppService = new UserAppService();
+            _userAppService = userAppService;
         }
+
         [HttpGet]
         public IActionResult ChangePassword()
         {
