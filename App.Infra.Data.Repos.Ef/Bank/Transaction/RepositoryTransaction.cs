@@ -35,7 +35,7 @@ using System.Threading.Tasks;
         {
          
 
-            return _appDbContext.Transactions.Where(x => x.Card.CardNumber == CardNumber && x.Card.UserId == MemoryDb.CurrentCard.UserId).AsNoTracking()
+            return _appDbContext.Transactions.Where(x => x.SourceCardNumber == CardNumber && x.Card.UserId == MemoryDb.CurrentCard.UserId).AsNoTracking()
                  .Select(x => new GetTrranDto()
                  {
                      Id = x.Id,

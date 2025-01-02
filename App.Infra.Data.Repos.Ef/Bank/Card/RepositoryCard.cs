@@ -51,7 +51,7 @@ using System.Threading.Tasks;
 
         public Card GetCardSource(string SourceCardNumber)
         {
-           return _appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == SourceCardNumber);
+           return _appDbContext.Cards.AsNoTracking().FirstOrDefault(x => x.CardNumber == SourceCardNumber && MemoryDb.CurrentCard.UserId == x.UserId);
         }
 
         public Card GetCardDes(string DestinationCardNumber)

@@ -130,47 +130,55 @@ namespace App.Domain.AppServices.Bank.Transaction
 
 
                 var cardSource = _serviceCard.GetCardSource(SourceCardNumber);
-
-
-                cardSource.Balance = cardSource.Balance - Amount - fee;
-                var cardSourceBalance = cardSource.Balance;
-                _serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
-                var cardDes = _serviceCard.GetCardSource(DestinationCardNumber);
-                try
+                if (cardSource != null)
                 {
-                    cardDes.Balance = cardDes.Balance + Amount;
-                    var cardDesBalance = cardDes.Balance;
-                    _serviceCard.UpdateCardDes(DestinationCardNumber, cardDesBalance);
-
-                    isSuccessful = true;
-                }
-                catch (Exception ex)
-                {
-                    cardSource.Balance = cardSource.Balance + Amount + fee;
-                    cardSourceBalance = cardSource.Balance;
+                    cardSource.Balance = cardSource.Balance - Amount - fee;
+                    var cardSourceBalance = cardSource.Balance;
                     _serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
-                    isSuccessful = false;
-                    throw new Exception("Transer Money is Faild");
-                }
-                finally
-                {
-                    
-                    var trans =new global::Transaction
+                    var cardDes = _serviceCard.GetCardDes(DestinationCardNumber);
+                    try
                     {
-                        CardId = MemoryDb.CurrentCard.Id,
-                        Amount = Amount,
-                        SourceCardNumber = SourceCardNumber,
-                        DestinationCardNumber = DestinationCardNumber,
-                        isSuccessful = isSuccessful,
-                        TransactionDate = DateTime.Now,
+                        cardDes.Balance = cardDes.Balance + Amount;
+                        var cardDesBalance = cardDes.Balance;
+                        _serviceCard.UpdateCardDes(DestinationCardNumber, cardDesBalance);
 
-                    };
+                        isSuccessful = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        cardSource.Balance = cardSource.Balance + Amount + fee;
+                        cardSourceBalance = cardSource.Balance;
+                        _serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
+                        isSuccessful = false;
+                        throw new Exception("Transer Money is Faild");
+                    }
+                    finally
+                    {
 
-                    _serviceTransaction.Transfer(trans);
+                        var trans = new global::Transaction
+                        {
+                            CardId = MemoryDb.CurrentCard.Id,
+                            Amount = Amount,
+                            SourceCardNumber = SourceCardNumber,
+                            DestinationCardNumber = DestinationCardNumber,
+                            isSuccessful = isSuccessful,
+                            TransactionDate = DateTime.Now,
+
+                        };
+
+                        _serviceTransaction.Transfer(trans);
+
+
+                    }
+                    return new Result(true, "Money Transfer Completed Successfully.");
+                }
+
+                else
+                {
+                    return new Result(false, "You do not have access to the SourceCardNumber .");
 
 
                 }
-                return new Result(true, "Money Transfer Completed Successfully.");
             }
 
 
