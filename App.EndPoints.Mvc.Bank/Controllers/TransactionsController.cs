@@ -161,9 +161,9 @@ namespace App.EndPoints.Mvc.Bank.Controllers
                     }
                     else
                     {
-                        ViewBag.Message = "Your code has expired.";
+                        ViewBag.ErrorMessage = "Your code has expired.";
                     }
-
+                    return View();
                 }
                 
 
