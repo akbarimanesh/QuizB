@@ -12,35 +12,40 @@ namespace App.Domain.AppServices.Bank.Transaction
 {
     public class TransactionAppService : ITransactionAppService
     {
-        IServiceCard serviceCard;
-        IServiceTransaction serviceTransaction;
-        public TransactionAppService()
+        IServiceCard _serviceCard;
+        IServiceTransaction _serviceTransaction;
+        public TransactionAppService(IServiceCard serviceCard , IServiceTransaction serviceTransaction)
         {
-            serviceTransaction = new ServiceTransaction();
-            serviceCard = new ServiceCard();
+            _serviceCard = serviceCard;
+            _serviceTransaction = serviceTransaction;
         }
+
+       
+
+       
+
         public List<GetTrranDto> GetListOfTransactions(string CardNumber)
         {
             if (CardNumber.Length != 16)
             {
                 throw new Exception("The card number numberCard is not valid.");
             }
-            if (!serviceCard.IsActive(CardNumber))
+            if (!_serviceCard.IsActive(CardNumber))
             {
                 throw new Exception("numberCard is blocked.");
             }
-            if (!serviceCard.IsCardExists(CardNumber))
+            if (!_serviceCard.IsCardExists(CardNumber))
             {
                 throw new Exception("This card is not available..");
             }
 
             else
             {
-                if (serviceTransaction.GetListOfTransactions(CardNumber) == null)
+                if (_serviceTransaction.GetListOfTransactions(CardNumber) == null)
                 {
                     throw new Exception("You do not have access to this card.");
                 }
-                else return serviceTransaction.GetListOfTransactions(CardNumber);
+                else return _serviceTransaction.GetListOfTransactions(CardNumber);
 
             }
 
@@ -48,7 +53,7 @@ namespace App.Domain.AppServices.Bank.Transaction
 
         public bool IsVerificationCode(string CardSouNumber, string code)
         {
-            var data = serviceTransaction.ReadVerificationCode();
+            var data = _serviceTransaction.ReadVerificationCode();
             if (data == null) { return false; }
             else
             {
@@ -75,7 +80,7 @@ namespace App.Domain.AppServices.Bank.Transaction
         public void GenerateVerificationCode(string CardSouNumber)
         {
 
-            serviceTransaction.GenerateVerificationCode(CardSouNumber);
+            _serviceTransaction.GenerateVerificationCode(CardSouNumber);
         }
         public Result Transfer(string SourceCardNumber, string DestinationCardNumber, float Amount)
 
@@ -102,15 +107,15 @@ namespace App.Domain.AppServices.Bank.Transaction
                 return new Result(false, "The deposit amount must be greater than zero.");
             }
 
-            if (serviceTransaction.SumTransactionCard(MemoryDb.CurrentCard.CardNumber, Amount) + Amount > 250)
+            if (_serviceTransaction.SumTransactionCard(MemoryDb.CurrentCard.CardNumber, Amount) + Amount > 250)
             {
                 return new Result(false, "our transaction limit has been reached.");
             }
-            if (!serviceCard.IsActive(SourceCardNumber))
+            if (!_serviceCard.IsActive(SourceCardNumber))
             {
                 return new Result(false, "SourceCardNumber is blocked.");
             }
-            if (!serviceCard.IsActive(DestinationCardNumber))
+            if (!_serviceCard.IsActive(DestinationCardNumber))
             {
                 return new Result(false, "DestinationCardNumber is blocked.");
             }
@@ -124,18 +129,18 @@ namespace App.Domain.AppServices.Bank.Transaction
             {
 
 
-                var cardSource = serviceCard.GetCardSource(SourceCardNumber);
+                var cardSource = _serviceCard.GetCardSource(SourceCardNumber);
 
 
                 cardSource.Balance = cardSource.Balance - Amount - fee;
                 var cardSourceBalance = cardSource.Balance;
-                serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
-                var cardDes = serviceCard.GetCardSource(DestinationCardNumber);
+                _serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
+                var cardDes = _serviceCard.GetCardSource(DestinationCardNumber);
                 try
                 {
                     cardDes.Balance = cardDes.Balance + Amount;
                     var cardDesBalance = cardDes.Balance;
-                    serviceCard.UpdateCardDes(DestinationCardNumber, cardDesBalance);
+                    _serviceCard.UpdateCardDes(DestinationCardNumber, cardDesBalance);
 
                     isSuccessful = true;
                 }
@@ -143,7 +148,7 @@ namespace App.Domain.AppServices.Bank.Transaction
                 {
                     cardSource.Balance = cardSource.Balance + Amount + fee;
                     cardSourceBalance = cardSource.Balance;
-                    serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
+                    _serviceCard.UpdateCardSource(SourceCardNumber, cardSourceBalance);
                     isSuccessful = false;
                     throw new Exception("Transer Money is Faild");
                 }
@@ -161,7 +166,7 @@ namespace App.Domain.AppServices.Bank.Transaction
 
                     };
 
-                    serviceTransaction.Transfer(trans);
+                    _serviceTransaction.Transfer(trans);
 
 
                 }

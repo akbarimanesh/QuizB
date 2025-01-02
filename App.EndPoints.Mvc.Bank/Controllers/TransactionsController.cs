@@ -10,11 +10,16 @@ namespace App.EndPoints.Mvc.Bank.Controllers
     {
         private readonly ITransactionAppService _transactionAppService;
         private readonly ICardAppService _cardAppService;
-        public TransactionsController()
+        public TransactionsController(ITransactionAppService transactionAppService , ICardAppService cardAppService)
         {
-            _transactionAppService = new TransactionAppService();
-            _cardAppService = new CardAppService();
+            _transactionAppService = transactionAppService;
+            _cardAppService = cardAppService;
         }
+
+       
+
+       
+
         [HttpGet]
         public IActionResult ListTransactions()
         {

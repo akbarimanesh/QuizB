@@ -10,12 +10,15 @@ using System.Threading.Tasks;
 
     public class CardAppService : ICardAppService
     {
-        IServiceCard SerCard;
-        private int _failedCount = 0;
-        public CardAppService()
-        {
-           SerCard = new ServiceCard();
-        }
+        IServiceCard _SerCard;
+
+    public CardAppService(IServiceCard serCard)
+    {
+        _SerCard = serCard;
+    }
+
+    private int _failedCount = 0;
+       
         public string DisplayHolderName(string CardDesNumber)
         {
              if (CardDesNumber.Length != 16)
@@ -23,7 +26,7 @@ using System.Threading.Tasks;
                  throw new Exception("The card is not valid.");
                    
              }
-             var card=SerCard.GetCard(CardDesNumber);
+             var card= _SerCard.GetCard(CardDesNumber);
              if (card == null || !card.IsActive)
              {
                  throw new Exception("Card is not active.");
@@ -31,7 +34,7 @@ using System.Threading.Tasks;
              }
              else
              {
-                   return SerCard.DisplayHolderName(CardDesNumber);
+                   return _SerCard.DisplayHolderName(CardDesNumber);
              }
        
         }
@@ -43,7 +46,7 @@ using System.Threading.Tasks;
             return new Result(false, "The card is not valid.");
         }
 
-        var card = SerCard.GetCard(cardNumber);
+        var card = _SerCard.GetCard(cardNumber);
 
         if (card == null || !card.IsActive)
         {
@@ -63,7 +66,7 @@ using System.Threading.Tasks;
             if (_failedCount >= 3)
             {
                 card.IsActive = false;
-                SerCard.UpdateCard(cardNumber);
+                _SerCard.UpdateCard(cardNumber);
                 return new Result(false, "Card deactivated.");
             }
 

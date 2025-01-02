@@ -7,11 +7,14 @@ namespace App.EndPoints.Mvc.Bank.Controllers
 {
     public class CardController : Controller
     {
-        private readonly ICardAppService cardAppService;
-        public CardController()
+        private readonly ICardAppService _cardAppService;
+
+        public CardController(ICardAppService cardAppService)
         {
-            cardAppService = new CardAppService();
+            _cardAppService = cardAppService;
         }
+
+       
         [HttpGet]
         public IActionResult Login()
         {
@@ -21,7 +24,7 @@ namespace App.EndPoints.Mvc.Bank.Controllers
         public IActionResult Login(string cardNumber, string password)
         {
 
-            var result = cardAppService.Login(cardNumber, password);
+            var result = _cardAppService.Login(cardNumber, password);
             
             if (result.IsSuccess)
             {

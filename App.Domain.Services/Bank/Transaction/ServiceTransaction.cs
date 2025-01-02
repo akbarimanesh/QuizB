@@ -17,41 +17,41 @@ using static System.Net.Mime.MediaTypeNames;
     public class ServiceTransaction : IServiceTransaction
     {
    
-        IRepositoryTransaction repositoryTransaction;
-    public ServiceTransaction()
+        IRepositoryTransaction _repositoryTransaction;
+
+    public ServiceTransaction(IRepositoryTransaction repositoryTransaction)
     {
-        repositoryTransaction = new RepositoryTransaction();
-       
+        _repositoryTransaction = repositoryTransaction;
     }
 
     public void GenerateVerificationCode(string CardSouNumber)
     {
-        repositoryTransaction.GenerateVerificationCode(CardSouNumber);
+        _repositoryTransaction.GenerateVerificationCode(CardSouNumber);
     }
 
     public Card GetCard(string CardNumber)
     {
-       return  repositoryTransaction.GetCard(CardNumber);
+       return  _repositoryTransaction.GetCard(CardNumber);
     }
 
     public List<GetTrranDto> GetListOfTransactions(string CardNumber)
     {
-        return repositoryTransaction.GetListOfTransactions(CardNumber);
+        return _repositoryTransaction.GetListOfTransactions(CardNumber);
     }
 
     public string ReadVerificationCode()
     {
-        return repositoryTransaction.ReadVerificationCode();
+        return _repositoryTransaction.ReadVerificationCode();
     }
 
     public float SumTransactionCard(string CardNumber, float Amount)
     {
-       return  repositoryTransaction.SumTransactionCard(CardNumber, Amount);
+       return  _repositoryTransaction.SumTransactionCard(CardNumber, Amount);
     }
 
     public void Transfer(Transaction transaction)
     {
-        repositoryTransaction.Transfer(transaction);
+        _repositoryTransaction.Transfer(transaction);
     }
 }
 
